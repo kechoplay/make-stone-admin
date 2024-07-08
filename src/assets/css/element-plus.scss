@@ -1,0 +1,37 @@
+.el-input {
+  background-color: #ffff;
+  border: 1px solid #b5b5b5;
+  height: 50px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 17px;
+  border-radius: 5px;
+
+  .el-input__wrapper {
+    box-shadow: none !important;
+    background-color: unset;
+  }
+
+  .el-input-group__append {
+    background-color: #ffff;
+    box-shadow: none !important;
+    padding-right: 10px !important;
+  }
+}
+.el-form-item .el-form-item__label {
+  font-size: 16px;
+  color: #323232;
+}
+.el-form-item__error {
+  color: #ba0000 !important;
+  font-weight: 400;
+  font-size: 12px !important;
+  line-height: 24px !important;
+  text-align: right;
+  text-decoration-line: none;
+  right: 0px !important;
+}
+
+.el-checkbox__input {
+  margin-right: 0 !important;
+}

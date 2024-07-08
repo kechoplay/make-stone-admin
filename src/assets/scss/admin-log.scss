@@ -1,0 +1,22 @@
+.title {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #26619b;
+  font-weight: bold;
+}
+
+.el-table {
+  --el-table-header-bg-color: #0492c2;
+  --el-table-header-text-color: #fff;
+  --el-table-border: 1px solid #9fc1ce;
+  --el-table-border-color: #9fc1ce;
+}
+
+::v-deep(.admin_log) {
+  th {
+    text-align: left;
+    background-color: #0492c2;
+    color: #ffffff;
+    border: 1px solid #ddd;
+  }
+}

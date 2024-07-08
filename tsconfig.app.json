@@ -1,0 +1,14 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["./src/"],
+  "exclude": ["source/src/**/__tests__/*", "node_modules"],
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "composite": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

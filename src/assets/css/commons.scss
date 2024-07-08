@@ -1,0 +1,55 @@
+$directions: (top, right, bottom, left);
+
+@for $i from 0 through 200 {
+  @each $d in $directions {
+    .m-#{$d}-#{$i} {
+      margin-#{$d}: 1px * $i !important;
+    }
+    .p-#{$d}-#{$i} {
+      padding-#{$d}: 1px * $i !important;
+    }
+    .m-#{$i} {
+      margin: 1px * $i !important;
+    }
+    .my-#{$i} {
+      margin-top: 1px * $i !important;
+      margin-bottom: 1px * $i !important;
+    }
+    .mx-#{$i} {
+      margin-left: 1px * $i !important;
+      margin-right: 1px * $i !important;
+    }
+    .p-#{$i} {
+      padding: 1px * $i !important;
+    }
+    .py-#{$i} {
+      padding-top: 1px * $i !important;
+      padding-bottom: 1px * $i !important;
+    }
+    .px-#{$i} {
+      padding-left: 1px * $i !important;
+      padding-right: 1px * $i !important;
+    }
+    .w-#{$i} {
+      width: 1px * $i !important;
+    }
+    .h-#{$i} {
+      height: 1px * $i !important;
+    }
+    .rounded-#{$i} {
+      border-radius: 1px * $i !important;
+    }
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}

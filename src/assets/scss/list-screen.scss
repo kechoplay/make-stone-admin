@@ -1,0 +1,183 @@
+.list-screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #26619b;
+  margin-bottom: 22px;
+}
+
+.btn-back {
+  background-color: #4e6b82;
+  border-radius: 5px;
+  font-weight: 700;
+  border: 1px solid #4e6b82;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px; /* 114.286% */
+}
+
+.btn-save {
+  background-color: #0492c2;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 700;
+}
+
+.btn-unsave {
+  background-color: #fff;
+  color: #4e6b82;
+  border-radius: 5px;
+  font-weight: 700;
+  border: 1px solid #4e6b82;
+}
+
+.el-table {
+  --el-table-header-bg-color: #0492c2;
+  --el-table-header-text-color: #fff;
+  --el-table-border: 1px solid #9fc1ce;
+  --el-table-border-color: #9fc1ce;
+}
+.table-header {
+  background-color: #0492c2;
+  --el-table-header-text-color: #fff;
+  font-weight: 700;
+}
+
+.el-checkbox {
+  --el-checkbox-input-height: 20px;
+  --el-checkbox-input-width: 20px;
+  --el-checkbox-border-radius: 4px;
+  --el-checkbox-input-border: 1px solid #ababab;
+}
+
+.badge-name {
+  border-radius: 5px;
+  border: 1px solid #0492c2;
+  background: #dcf5ff;
+  color: #26619b;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 16px;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+.badge-total-device {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: #87ceea;
+  color: #0492c2;
+  text-align: center;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 16px;
+  cursor: pointer;
+  padding: 4px 4px;
+  border: 1px solid #0492c2;
+  background: #dcf5ff;
+}
+
+.user-table {
+  border-radius: 5px 5px 0px 0px;
+}
+
+:deep() {
+  .el-checkbox__inner::after {
+    left: 5px !important;
+    height: 12px !important;
+    top: 0px;
+    width: 6px;
+    border: 2px solid #ffffff;
+    border-top: none;
+    border-left: none;
+  }
+
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #0492c2;
+    border: 1px solid #0492c2;
+  }
+
+  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+    background-color: #ffffff;
+  }
+
+  .el-checkbox__input {
+    margin-right: 13px;
+  }
+
+  .checkbox-delete {
+    .el-checkbox__inner::after {
+      left: 5px !important;
+      height: 12px !important;
+      top: 0px;
+      width: 6px;
+      border: 2px solid #9f2525;
+      border-top: none;
+      border-left: none;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner {
+      background-color: #ffffff;
+      border: 1px solid #9f2525;
+    }
+  }
+  .checkbox-role {
+    .el-checkbox__inner::after {
+      left: 5px !important;
+      height: 12px !important;
+      top: 0px;
+      width: 6px;
+      border: 2px solid #0492c2;
+      border-top: none;
+      border-left: none;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner {
+      background-color: #d8efff;
+      border: 1px solid #0492c2;
+    }
+    .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+      left: 5px !important;
+      height: 12px !important;
+      top: 0px;
+      width: 6px;
+      border: 2px solid #0492c2;
+      border-top: none;
+      border-left: none;
+    }
+  }
+  .el-table .sort-caret.ascending {
+    border-bottom-color: #ffffff;
+    top: -10px;
+  }
+  .el-table .sort-caret.descending {
+    border-top-color: #ffffff;
+    bottom: -7px;
+  }
+  .el-table .ascending .sort-caret.ascending {
+    border-bottom-color: #000000;
+  }
+  .el-table .descending .sort-caret.descending {
+    border-top-color: #000000;
+  }
+  .el-table .sort-caret {
+    border: 7px solid transparent;
+  }
+  .el-table thead.is-group th.el-table__cell {
+    background: #0492c2;
+  }
+}
+::v-deep(.is-group tr:first-child th.el-table__cell) {
+  background-color: #085183;
+}
