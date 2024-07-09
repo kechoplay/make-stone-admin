@@ -22,6 +22,5 @@ import { RouterView } from "vue-router"
 </template>
 
 <style lang="scss">
-@import "@/assets/scss/master-layout.scss";
 @import "@/assets/css/style.css";
 </style>
