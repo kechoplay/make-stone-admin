@@ -1,4 +1,5 @@
-import "@/assets/css/main.scss"
+import './assets/css/satoshi.css'
+import './assets/css/style.css'
 
 import { createPinia } from "pinia"
 import { createApp, markRaw } from "vue"
@@ -25,7 +26,6 @@ import {
 import Config from "@/configs/constant"
 import commonHelpers from "@/helpers/common"
 import type { Router } from "vue-router"
-import "./style.css"
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
