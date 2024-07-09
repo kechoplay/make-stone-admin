@@ -17,7 +17,6 @@ interface SidebarItem {
 }
 
 const handleItemClick = () => {
-  console.log(props.item)
   const pageName = sidebarStore.page === props.item.label ? '' : props.item.label
   sidebarStore.page = pageName
 

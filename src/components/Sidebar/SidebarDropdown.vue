@@ -6,7 +6,7 @@ const sidebarStore = useSidebarStore()
 
 const props = defineProps<{
   items: object,
-  page: number
+  page: string
 }>()
 
 const handleItemClick = (index: number) => {
