@@ -129,5 +129,4 @@ const submitForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/scss/login.scss";
 </style>
