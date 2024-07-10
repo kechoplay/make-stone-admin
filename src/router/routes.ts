@@ -13,8 +13,18 @@ export interface RouteDefined {
 const routes: RouteDefined[] & any = [
   {
     path: "/",
-    name: "home",
-    component: () => import("@/views/Home/index.vue")
+    showRoute: true,
+    component: () => import("@/views/Product/Product.vue")
+  },
+  {
+    path: "",
+    showRoute: true,
+    component: () => import("@/views/Product/Product.vue")
+  },
+  {
+    path: "/product",
+    showRoute: true,
+    component: () => import("@/views/Product/Product.vue")
   },
   {
     path: "/logout",
@@ -27,6 +37,12 @@ const routes: RouteDefined[] & any = [
     name: "login",
     showRoute: false,
     component: () => import("@/views/LoginPage/index.vue")
+  },
+  {
+    path: "/add-product",
+    name: "addProduct",
+    showRoute: true,
+    component: () => import("@/views/Product/AddProduct.vue")
   },
 ]
 

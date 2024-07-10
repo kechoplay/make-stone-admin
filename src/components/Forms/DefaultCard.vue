@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps(['cardTitle'])
+const props = defineProps<{
+  cardTitle: string
+}>()
 </script>
 
 <template>

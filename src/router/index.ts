@@ -10,8 +10,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-  const DEFAULT_TITLE = "Hermetic Remote"
-  document.title = String(`Hermetic Remote` || DEFAULT_TITLE)
+  const DEFAULT_TITLE = "Stone"
+  document.title = String(`Stone` || DEFAULT_TITLE)
 
   const publicPages = ["/login", "/register"]
   const publicPagesLogin = ["/login", "/register", "/"]

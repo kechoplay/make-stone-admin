@@ -10,12 +10,10 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint .. --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src",
-    "generate": "npx @openapitools/openapi-generator-cli generate -i ../../hermetic_remote_swagger/admin/swagger.yaml -g typescript-axios -o ./src/generator --skip-validate-spec"
+    "format": "prettier --write src"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
-    "@openapitools/openapi-generator-cli": "^2.6.0",
     "@types/lodash": "4.14.195",
     "autoprefixer": "^10.4.19",
     "axios": "1.4.0",
