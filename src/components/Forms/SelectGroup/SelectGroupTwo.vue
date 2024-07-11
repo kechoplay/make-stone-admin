@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {defineComponent, ref} from 'vue'
+
+
 
 const selectedOption = ref<string>('')
 const isOptionSelected = ref<boolean>(false)

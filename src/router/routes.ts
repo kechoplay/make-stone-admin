@@ -44,6 +44,26 @@ const routes: RouteDefined[] & any = [
     showRoute: true,
     component: () => import("@/views/Product/AddProduct.vue")
   },
+  {
+    path: "/category",
+    showRoute: true,
+    component: () => import("@/views/Category/Category.vue")
+  },
+  {
+    path: "/add-category",
+    showRoute: true,
+    component: () => import("@/views/Category/AddCategory.vue")
+  },
+  {
+    path: "/affiliate-link",
+    showRoute: true,
+    component: () => import("@/views/Category/Category.vue")
+  },
+  {
+    path: "/add-affiliate-link",
+    showRoute: true,
+    component: () => import("@/views/Category/AddCategory.vue")
+  },
 ]
 
 export default routes
