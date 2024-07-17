@@ -1,49 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import ProductService from "@/api/product.service"
 
-import ProductOne from '@/assets/images/product/product-01.png'
-import ProductTwo from '@/assets/images/product/product-02.png'
-import ProductThree from '@/assets/images/product/product-03.png'
-import ProductFour from '@/assets/images/product/product-04.png'
+const products = ref([])
 
-const products = ref([
-  {
-    id: 1,
-    name: 'Apple Watch Series 7',
-    category: 'Electronics',
-    price: 269,
-    sold: 22,
-    profit: 45,
-    imageSrc: ProductOne
-  },
-  {
-    id: 2,
-    name: 'Macbook Pro M1',
-    category: 'Electronics',
-    price: 546,
-    sold: 34,
-    profit: 125,
-    imageSrc: ProductTwo
-  },
-  {
-    id: 3,
-    name: 'Dell Inspiron 15',
-    category: 'Electronics',
-    price: 443,
-    sold: 64,
-    profit: 247,
-    imageSrc: ProductThree
-  },
-  {
-    id: 4,
-    name: 'HP Probook 450',
-    category: 'Electronics',
-    price: 499,
-    sold: 72,
-    profit: 103,
-    imageSrc: ProductFour
-  }
-])
+const created = async () => {
+  Promise.all([
+    ProductService.getProductList(),
+  ]).then((response) => {
+    products.value = response[0].data.data
+  })
+}
+
+created()
 </script>
 
 <template>

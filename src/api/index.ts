@@ -1,4 +1,4 @@
 import ApiService from "@/api/axios"
-import AuthService from "@/api/services/auth"
+import UserService from "@/api/user.service"
 
-export { ApiService, AuthService }
+export { ApiService, UserService }

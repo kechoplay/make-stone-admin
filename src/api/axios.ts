@@ -1,7 +1,6 @@
 import axios from "axios"
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
+import type { AxiosInstance } from "axios"
 import { useAuthStore } from "@/stores/auth.store"
-import Constants from "@/configs/constant"
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -9,7 +8,7 @@ declare module "@vue/runtime-core" {
   }
 }
 
-const InnovationApi = axios.create({
+const innovationApi = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     contentType: "application/json",
@@ -20,18 +19,17 @@ const InnovationApi = axios.create({
     locale: "ja",
     Timezone: new Date().getTimezoneOffset(),
     "X-Requested-With": "XMLHttpRequest",
-    Accept: "application/json"
+    Accept: "application/json",
+    "SECURITY-KEY": import.meta.env.VITE_SECURITY_KEY
   }
 })
 
-InnovationApi.interceptors.request.use(
+innovationApi.interceptors.request.use(
   async function (config) {
-    const token = JSON.parse(localStorage.getItem("token") as string)
-
+    const { token } = useAuthStore()
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`
     }
-
     return config
   },
   function (err) {
@@ -45,40 +43,51 @@ InnovationApi.interceptors.request.use(
   }
 )
 
-const checkErrorResponse = async (error: AxiosResponse & { response: AxiosRequestConfig }) => {
-  const originalRequest = error.config
-  const { logout } = useAuthStore()
-
-  switch (!!error.response) {
-    case error.response.data.errors.error_code === Constants.ERROR_TOKEN.TOKEN_EXPIRE &&
-      !originalRequest.url?.includes(Constants.API_END_POINT.LOGOUT): {
-      const response = await InnovationApi.post(Constants.API_END_POINT.REFRESH_TOKEN)
-
-      localStorage.setItem("token", JSON.stringify(response.data.data.access_token))
-
-      originalRequest.headers.Authorization = `Bearer ${response.data.data.access_token}`
-
-      return await InnovationApi(originalRequest)
-    }
-
-    case error.response.data.errors.error_code === Constants.ERROR_TOKEN.REFRESH_TOKEN_EXPIRE:
-    case error.response.data.errors.error_code === Constants.ERROR_TOKEN.NOT_LOGIN:
-    case originalRequest.url?.includes(Constants.API_END_POINT.LOGOUT):
-      logout(true)
-      break
-
-    default:
-      return Promise.reject(error)
-  }
-}
-
-InnovationApi.interceptors.response.use(
+innovationApi.interceptors.response.use(
   (response) => {
     return response
   },
   async (error) => {
-    await checkErrorResponse(error)
+    console.log(error.response)
+    if (error?.response.status === 403) {
+      const { logout } = useAuthStore()
+
+      logout()
+    }
+
+    return error.response
   }
 )
 
-export default InnovationApi
+const ApiService = {
+  setResponseType(type: any) {
+    innovationApi.defaults.responseType = type
+  },
+  get(resource: any, config = {}) {
+    return innovationApi.get(resource, config)
+  },
+  post(resource: any, params: any, config = {}) {
+    return innovationApi.post(`${resource}`, params, config)
+  },
+  update(resource: any, params: any, config = {}) {
+    return innovationApi.put(resource, params, config)
+  },
+  delete(resource: any, config = {}) {
+    return innovationApi.delete(resource, config)
+  },
+  updateSingle(resource: any, params: any, config = {}) {
+    return innovationApi.patch(resource, params, config)
+  },
+  customRequest(config: any) {
+    return innovationApi(config)
+  },
+  postFormData(resource: any, params: any) {
+    return innovationApi.post(resource, params, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+  }
+}
+
+export default ApiService
