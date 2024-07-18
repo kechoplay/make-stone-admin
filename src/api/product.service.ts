@@ -6,6 +6,9 @@ const ProductService = {
     const url = ApiUrl.GET_LIST_PRODUCT
     return ApiService.get(url)
   },
+  createProduct(formData) {
+    return ApiService.postFormData(ApiUrl.CREATE_PRODUCT, {formData: formData})
+  },
   // verifyCodeSearch(code: string) {
   //   const url = ApiUrl.VERIFY_CODE_SEARCH.replace(
   //     `{${"code"}}`,
