@@ -1,8 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ProductService from "@/api/product.service"
+import {ElNotification} from "element-plus"
 
 const products = ref([])
+
+const notificationError = (message) => {
+  ElNotification({
+    title: "Error",
+    message: message,
+    type: "error"
+  })
+}
+
+const notificationSuccess = (message) => {
+  ElNotification({
+    title: "Success",
+    message: message,
+    type: "success"
+  })
+}
 
 const created = async () => {
   Promise.all([
@@ -13,6 +30,16 @@ const created = async () => {
 }
 
 created()
+
+const deleteProduct = async (id) => {
+  const {data} = await ProductService.deleteProduct(id)
+  if (!data.status) {
+    notificationError("Thất bại")
+  } else {
+    notificationSuccess("Thành công")
+    await created()
+  }
+}
 </script>
 
 <template>
@@ -45,21 +72,21 @@ created()
     >
       <div class="col-span-3 flex items-center">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div class="h-12.5 w-15 rounded-md">
-            <img :src="product.imageSrc" :alt="`Product: ${product.name}`" />
+          <div class="h-full w-15 rounded-md">
+            <img :src="product.main_image" />
           </div>
           <p class="text-sm font-medium text-black dark:text-white">{{ product.name }}</p>
         </div>
       </div>
       <div class="col-span-2 hidden items-center sm:flex">
-        <p class="text-sm font-medium text-black dark:text-white">{{ product.category }}</p>
+        <p class="text-sm font-medium text-black dark:text-white">{{ product.category ? product.category.name : '' }}</p>
       </div>
       <div class="col-span-1 flex items-center">
-        <p class="text-sm font-medium text-black dark:text-white">${{ product.price }}</p>
+        <p class="text-sm font-medium text-black dark:text-white">{{ product.price }}</p>
       </div>
       <div class="col-span-1 flex items-center">
-        <button>Sửa</button>
-        <button>Xóa</button>
+        <el-button type="warning" round>Sửa</el-button>
+        <el-button type="danger" round @click="deleteProduct(product.id)">Xóa</el-button>
       </div>
     </div>
   </div>

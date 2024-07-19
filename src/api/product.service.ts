@@ -7,7 +7,14 @@ const ProductService = {
     return ApiService.get(url)
   },
   createProduct(formData) {
-    return ApiService.postFormData(ApiUrl.CREATE_PRODUCT, {formData: formData})
+    return ApiService.postFormData(ApiUrl.CREATE_PRODUCT, formData)
+  },
+  deleteProduct(id) {
+    const url = ApiUrl.DELETE_PRODUCT.replace(
+        `{${"id"}}`,
+        encodeURIComponent(String(id))
+      )
+    return ApiService.delete(url)
   },
   // verifyCodeSearch(code: string) {
   //   const url = ApiUrl.VERIFY_CODE_SEARCH.replace(
@@ -21,9 +28,6 @@ const ProductService = {
   //     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
   //     .join('&')
   //   return ApiService.get(ApiUrl.SEARCH_RELATED_ITEM + `?${newQuery}`)
-  // },
-  // uploadCsv(file) {
-  //   return ApiService.postFormData(ApiUrl.UPLOAD_CSV, {file: file})
   // },
 }
 

@@ -2,6 +2,7 @@
 import {reactive, ref} from 'vue'
 import {ElNotification} from "element-plus"
 import ProductService from "@/api/product.service"
+import CategoryService from "@/api/category.service"
 
 const ruleForm = reactive<{
   name: string
@@ -12,7 +13,7 @@ const ruleForm = reactive<{
   subImage: any
 }>({
   name: "",
-  category: 1,
+  category: 0,
   price: 0,
   description: "",
   mainImage: "",
@@ -21,6 +22,7 @@ const ruleForm = reactive<{
 
 const isOptionSelected = ref<boolean>(false)
 const loading = ref<boolean>(false)
+const categories = ref([])
 
 const notificationError = (message) => {
   ElNotification({
@@ -38,6 +40,16 @@ const notificationSuccess = (message) => {
   })
 }
 
+const created = async () => {
+  Promise.all([
+    CategoryService.getCategoryList(),
+  ]).then((response) => {
+    categories.value = response[0].data.data
+  })
+}
+
+created()
+
 const previewFiles = (event) => {
   const file = event.target.files[0]
   if (!file) return
@@ -46,12 +58,7 @@ const previewFiles = (event) => {
     notificationError("Ảnh không đúng định dạng")
     return
   }
-
-  const theReader = new FileReader()
-  theReader.onloadend = async () => {
-    ruleForm.mainImage = await theReader.result
-  }
-  theReader.readAsDataURL(file)
+  ruleForm.mainImage = file
 }
 
 const submitForm = async () => {
@@ -64,14 +71,13 @@ const submitForm = async () => {
     notificationError("Hãy nhập ảnh sản phẩm")
     return
   }
-  console.log(ruleForm)
-  // loading.value = true
+  loading.value = true
 
   const {data} = await ProductService.createProduct(ruleForm)
 
   loading.value = false
 
-  if (!data.success) {
+  if (!data.status) {
     notificationError("Thất bại")
   } else {
     notificationSuccess("Thành công")
@@ -105,10 +111,8 @@ const submitForm = async () => {
                   class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   :class="{ 'text-black dark:text-white': isOptionSelected }"
               >
-                <option value="" disabled selected>Select your subject</option>
-                <option value="1">USA</option>
-                <option value="2">UK</option>
-                <option value="3">Canada</option>
+                <option value="" disabled selected>Chon danh muc</option>
+                <option :value="category.id" :key="key" v-for="(category, key) in categories">{{ category.name }}</option>
               </select>
 
               <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2">

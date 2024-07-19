@@ -1,49 +1,45 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import CategoryService from "@/api/category.service"
+import {ElNotification} from "element-plus"
 
-import ProductOne from '@/assets/images/product/product-01.png'
-import ProductTwo from '@/assets/images/product/product-02.png'
-import ProductThree from '@/assets/images/product/product-03.png'
-import ProductFour from '@/assets/images/product/product-04.png'
+const categories = ref([])
 
-const products = ref([
-  {
-    id: 1,
-    name: 'Apple Watch Series 7',
-    category: 'Electronics',
-    price: 269,
-    sold: 22,
-    profit: 45,
-    imageSrc: ProductOne
-  },
-  {
-    id: 2,
-    name: 'Macbook Pro M1',
-    category: 'Electronics',
-    price: 546,
-    sold: 34,
-    profit: 125,
-    imageSrc: ProductTwo
-  },
-  {
-    id: 3,
-    name: 'Dell Inspiron 15',
-    category: 'Electronics',
-    price: 443,
-    sold: 64,
-    profit: 247,
-    imageSrc: ProductThree
-  },
-  {
-    id: 4,
-    name: 'HP Probook 450',
-    category: 'Electronics',
-    price: 499,
-    sold: 72,
-    profit: 103,
-    imageSrc: ProductFour
+const notificationError = (message) => {
+  ElNotification({
+    title: "Error",
+    message: message,
+    type: "error"
+  })
+}
+
+const notificationSuccess = (message) => {
+  ElNotification({
+    title: "Success",
+    message: message,
+    type: "success"
+  })
+}
+
+const created = async () => {
+  Promise.all([
+    CategoryService.getCategoryList(),
+  ]).then((response) => {
+    categories.value = response[0].data.data
+  })
+}
+
+created()
+
+const deleteCategory = async (id) => {
+  const {data} = await CategoryService.deleteCategory(id)
+  if (!data.status) {
+    notificationError("Thất bại")
+  } else {
+    notificationSuccess("Thành công")
+    await created()
   }
-])
+}
 </script>
 
 <template>
@@ -61,21 +57,18 @@ const products = ref([
     </div>
 
     <div
-        v-for="product in products"
-        :key="product.id"
+        v-for="category in categories"
+        :key="category.id"
         class="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
     >
       <div class="col-span-3 flex items-center">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div class="h-12.5 w-15 rounded-md">
-            <img :src="product.imageSrc" :alt="`Product: ${product.name}`" />
-          </div>
-          <p class="text-sm font-medium text-black dark:text-white">{{ product.name }}</p>
+          <p class="text-sm font-medium text-black dark:text-white">{{ category.name }}</p>
         </div>
       </div>
       <div class="col-span-1 flex items-center">
-        <button>Sửa</button>
-        <button>Xóa</button>
+        <el-button type="warning" round>Sửa</el-button>
+        <el-button type="danger" round @click="deleteCategory(category.id)">Xóa</el-button>
       </div>
     </div>
   </div>
