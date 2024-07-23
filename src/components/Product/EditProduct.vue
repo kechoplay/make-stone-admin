@@ -3,14 +3,15 @@ import {reactive, ref} from 'vue'
 import {ElNotification} from "element-plus"
 import ProductService from "@/api/product.service"
 import CategoryService from "@/api/category.service"
-import { Plus } from '@element-plus/icons-vue'
+import {useRoute} from "vue-router"
 
-const ruleForm = reactive<{
+const ruleForm = ref<{
   name: string
   category: number
   price: number
   description: string
-  mainImage: any
+  mainImage: any,
+  newMainImage: any,
   subImage: any
 }>({
   name: "",
@@ -18,16 +19,17 @@ const ruleForm = reactive<{
   price: 0,
   description: "",
   mainImage: "",
+  newMainImage: "",
   subImage: "",
 })
 
 const isOptionSelected = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const categories = ref([])
-const previewImage = ref<any>(null)
-const fileList = ref<[]>([])
+const route = useRoute()
+const id = route.params.id
 
-const notificationError = (message) => {
+const notificationError = (message: string) => {
   ElNotification({
     title: "Error",
     message: message,
@@ -35,7 +37,7 @@ const notificationError = (message) => {
   })
 }
 
-const notificationSuccess = (message) => {
+const notificationSuccess = (message: string) => {
   ElNotification({
     title: "Success",
     message: message,
@@ -46,8 +48,18 @@ const notificationSuccess = (message) => {
 const created = async () => {
   Promise.all([
     CategoryService.getCategoryList(),
+    ProductService.getDetailProduct(id)
   ]).then((response) => {
     categories.value = response[0].data.data
+    ruleForm.value = {
+      name: response[1].data.data.name,
+      category: response[1].data.data.category_id,
+      price: response[1].data.data.price,
+      description: response[1].data.data.description,
+      mainImage: response[1].data.data.main_image,
+      subImage: response[1].data.data.sub_image,
+      newMainImage: ""
+    }
   })
 }
 
@@ -61,32 +73,28 @@ const previewFiles = (event) => {
     notificationError("Ảnh không đúng định dạng")
     return
   }
-  ruleForm.mainImage = file
+  ruleForm.value.newMainImage = file
 
   const theReader = new FileReader()
   theReader.onloadend = async () => {
-    previewImage.value = await theReader.result
+    ruleForm.value.mainImage = await theReader.result
   }
   theReader.readAsDataURL(file)
 }
 
 const submitForm = async () => {
-  console.log(fileList.value)
-  if (ruleForm.name == "") {
+  if (ruleForm.value.name == "") {
     notificationError("Hãy nhập tên sản phẩm")
     return
   }
 
-  if (!ruleForm.mainImage) {
+  if (!ruleForm.value.mainImage) {
     notificationError("Hãy nhập ảnh sản phẩm")
     return
   }
-
-  ruleForm.subImage = fileList.value
-
   loading.value = true
 
-  const {data} = await ProductService.createProduct(ruleForm)
+  const {data} = await ProductService.updateProduct(id, ruleForm.value)
 
   loading.value = false
 
@@ -176,20 +184,17 @@ const submitForm = async () => {
                    @change="previewFiles($event)"
                    class="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-normal focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
             />
-            <img :src="previewImage" class="w-[200px] mt-[10px]" alt="" />
+            <img id="mainImage" class="w-[200px] mt-[10px]" :src="ruleForm.mainImage" alt=""/>
           </div>
 
           <div class="mb-6">
-            <label class="mb-3 block text-sm font-medium text-black dark:text-white">Ảnh phụ</label>
-            <el-upload
-                v-model:file-list="fileList"
-                :auto-upload="false"
-                :multiple="true"
-                accept="image/*"
-                list-type="picture-card"
-            >
-              <el-icon><plus /></el-icon>
-            </el-upload>
+            <label class="mb-3 block text-sm font-medium text-black dark:text-white">
+              Ảnh phụ
+            </label>
+            <input type="file" multiple accept="image/*"
+                   @change="previewFiles($event)"
+                   class="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-normal focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
+            />
           </div>
 
           <button type="button"

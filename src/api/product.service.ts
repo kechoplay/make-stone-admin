@@ -9,12 +9,26 @@ const ProductService = {
   createProduct(formData) {
     return ApiService.postFormData(ApiUrl.CREATE_PRODUCT, formData)
   },
+  updateProduct(id, formData) {
+    const url = ApiUrl.UPDATE_PRODUCT.replace(
+      `{${"id"}}`,
+      encodeURIComponent(String(id))
+    )
+    return ApiService.postFormData(url, formData)
+  },
   deleteProduct(id) {
     const url = ApiUrl.DELETE_PRODUCT.replace(
         `{${"id"}}`,
         encodeURIComponent(String(id))
       )
     return ApiService.delete(url)
+  },
+  getDetailProduct(id) {
+    const url = ApiUrl.DETAIL_PRODUCT.replace(
+      `{${"id"}}`,
+      encodeURIComponent(String(id))
+    )
+    return ApiService.get(url)
   },
   // verifyCodeSearch(code: string) {
   //   const url = ApiUrl.VERIFY_CODE_SEARCH.replace(

@@ -46,7 +46,7 @@ const menuGroups = ref([
         route: '#',
         children: [
           { label: 'Danh sách sản phẩm', route: '/product' },
-          { label: 'Thêm sản phẩm', route: '/add-product' }
+          { label: 'Thêm sản phẩm', route: '/product/add-product' }
         ]
       },
       {
@@ -132,7 +132,7 @@ const menuGroups = ref([
     <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
       <router-link to="/">
-        <img src="@/assets/images/logo/logo.svg" alt="Logo" />
+        <h2>PhoHien Jewel Admin</h2>
       </router-link>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">

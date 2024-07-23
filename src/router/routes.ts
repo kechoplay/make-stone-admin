@@ -39,10 +39,16 @@ const routes: RouteDefined[] & any = [
     component: () => import("@/views/LoginPage/index.vue")
   },
   {
-    path: "/add-product",
+    path: "/product/add-product",
     name: "addProduct",
     showRoute: true,
     component: () => import("@/views/Product/AddProduct.vue")
+  },
+  {
+    path: "/product/edit-product/:id",
+    name: "editProduct",
+    showRoute: true,
+    component: () => import("@/views/Product/EditProduct.vue")
   },
   {
     path: "/category",

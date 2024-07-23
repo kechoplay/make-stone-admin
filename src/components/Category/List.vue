@@ -67,8 +67,8 @@ const deleteCategory = async (id) => {
         </div>
       </div>
       <div class="col-span-1 flex items-center">
-        <el-button type="warning" round>Sửa</el-button>
-        <el-button type="danger" round @click="deleteCategory(category.id)">Xóa</el-button>
+        <el-button type="warning" class="mr-[5px]">Sửa</el-button>
+        <el-button type="danger" @click="deleteCategory(category.id)">Xóa</el-button>
       </div>
     </div>
   </div>

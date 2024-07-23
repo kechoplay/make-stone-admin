@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {ref} from 'vue'
 import ProductService from "@/api/product.service"
 import {ElNotification} from "element-plus"
 
@@ -73,20 +73,23 @@ const deleteProduct = async (id) => {
       <div class="col-span-3 flex items-center">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div class="h-full w-15 rounded-md">
-            <img :src="product.main_image" />
+            <img :src="product.main_image"/>
           </div>
           <p class="text-sm font-medium text-black dark:text-white">{{ product.name }}</p>
         </div>
       </div>
       <div class="col-span-2 hidden items-center sm:flex">
-        <p class="text-sm font-medium text-black dark:text-white">{{ product.category ? product.category.name : '' }}</p>
+        <p class="text-sm font-medium text-black dark:text-white">
+          {{ product.category ? product.category.name : '' }}</p>
       </div>
       <div class="col-span-1 flex items-center">
         <p class="text-sm font-medium text-black dark:text-white">{{ product.price }}</p>
       </div>
       <div class="col-span-1 flex items-center">
-        <el-button type="warning" round>Sửa</el-button>
-        <el-button type="danger" round @click="deleteProduct(product.id)">Xóa</el-button>
+        <router-link :to="'/product/edit-product/' + product.id">
+          <el-button type="warning" class="mr-[5px]">Sửa</el-button>
+        </router-link>
+        <el-button type="danger" @click="deleteProduct(product.id)">Xóa</el-button>
       </div>
     </div>
   </div>
