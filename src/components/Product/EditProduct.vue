@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {ref} from 'vue'
 import {ElNotification} from "element-plus"
 import ProductService from "@/api/product.service"
 import CategoryService from "@/api/category.service"
 import {useRoute} from "vue-router"
+import {Plus} from "@element-plus/icons-vue"
 
 const ruleForm = ref<{
   name: string
@@ -11,7 +12,6 @@ const ruleForm = ref<{
   price: number
   description: string
   mainImage: any,
-  newMainImage: any,
   subImage: any
 }>({
   name: "",
@@ -19,7 +19,6 @@ const ruleForm = ref<{
   price: 0,
   description: "",
   mainImage: "",
-  newMainImage: "",
   subImage: "",
 })
 
@@ -28,6 +27,8 @@ const loading = ref<boolean>(false)
 const categories = ref([])
 const route = useRoute()
 const id = route.params.id
+const fileList = ref<[]>([])
+const fileMain = ref<[]>([])
 
 const notificationError = (message: string) => {
   ElNotification({
@@ -58,8 +59,16 @@ const created = async () => {
       description: response[1].data.data.description,
       mainImage: response[1].data.data.main_image,
       subImage: response[1].data.data.sub_image,
-      newMainImage: ""
     }
+    fileMain.value.push({
+      url: response[1].data.data.main_image,
+    })
+    const listSubImage = response[1].data.data.sub_image
+    listSubImage.map((item) => {
+      fileList.value.push({
+        url: item
+      })
+    })
   })
 }
 
@@ -88,11 +97,14 @@ const submitForm = async () => {
     return
   }
 
-  if (!ruleForm.value.mainImage) {
+  if (fileMain.value.length == 0) {
     notificationError("Hãy nhập ảnh sản phẩm")
     return
   }
   loading.value = true
+
+  ruleForm.value.subImage = fileList.value
+  ruleForm.value.mainImage = fileMain.value[0]
 
   const {data} = await ProductService.updateProduct(id, ruleForm.value)
 
@@ -180,21 +192,28 @@ const submitForm = async () => {
             <label class="mb-3 block text-sm font-medium text-black dark:text-white">
               Ảnh chính
             </label>
-            <input type="file" accept="image/*"
-                   @change="previewFiles($event)"
-                   class="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-normal focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-            />
-            <img id="mainImage" class="w-[200px] mt-[10px]" :src="ruleForm.mainImage" alt=""/>
+            <el-upload
+                v-model:file-list="fileMain"
+                :auto-upload="false"
+                :limit="1"
+                accept="image/*"
+                list-type="picture-card"
+            >
+              <el-icon><plus /></el-icon>
+            </el-upload>
           </div>
 
           <div class="mb-6">
-            <label class="mb-3 block text-sm font-medium text-black dark:text-white">
-              Ảnh phụ
-            </label>
-            <input type="file" multiple accept="image/*"
-                   @change="previewFiles($event)"
-                   class="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-normal focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-            />
+            <label class="mb-3 block text-sm font-medium text-black dark:text-white">Ảnh phụ</label>
+            <el-upload
+                v-model:file-list="fileList"
+                :auto-upload="false"
+                :multiple="true"
+                accept="image/*"
+                list-type="picture-card"
+            >
+              <el-icon><plus /></el-icon>
+            </el-upload>
           </div>
 
           <button type="button"

@@ -24,8 +24,8 @@ const ruleForm = reactive<{
 const isOptionSelected = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const categories = ref([])
-const previewImage = ref<any>(null)
 const fileList = ref<[]>([])
+const fileMain = ref<[]>([])
 
 const notificationError = (message) => {
   ElNotification({
@@ -53,36 +53,19 @@ const created = async () => {
 
 created()
 
-const previewFiles = (event) => {
-  const file = event.target.files[0]
-  if (!file) return
-
-  if (!['image/png', 'image/jpeg', 'image/gif', 'image/jpg'].includes(file.type)) {
-    notificationError("Ảnh không đúng định dạng")
-    return
-  }
-  ruleForm.mainImage = file
-
-  const theReader = new FileReader()
-  theReader.onloadend = async () => {
-    previewImage.value = await theReader.result
-  }
-  theReader.readAsDataURL(file)
-}
-
 const submitForm = async () => {
-  console.log(fileList.value)
   if (ruleForm.name == "") {
     notificationError("Hãy nhập tên sản phẩm")
     return
   }
 
-  if (!ruleForm.mainImage) {
+  if (fileMain.value.length == 0) {
     notificationError("Hãy nhập ảnh sản phẩm")
     return
   }
 
   ruleForm.subImage = fileList.value
+  ruleForm.mainImage = fileMain.value[0]
 
   loading.value = true
 
@@ -172,11 +155,15 @@ const submitForm = async () => {
             <label class="mb-3 block text-sm font-medium text-black dark:text-white">
               Ảnh chính
             </label>
-            <input type="file" accept="image/*"
-                   @change="previewFiles($event)"
-                   class="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-normal focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
-            />
-            <img :src="previewImage" class="w-[200px] mt-[10px]" alt="" />
+            <el-upload
+                v-model:file-list="fileMain"
+                :auto-upload="false"
+                :limit="1"
+                accept="image/*"
+                list-type="picture-card"
+            >
+              <el-icon><plus /></el-icon>
+            </el-upload>
           </div>
 
           <div class="mb-6">
