@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import ProductService from "@/api/product.service"
-import {ElNotification} from "element-plus"
+import {ElNotification, ElMessage, ElMessageBox} from "element-plus"
 
 const products = ref([])
 
@@ -31,7 +31,7 @@ const created = async () => {
 
 created()
 
-const deleteProduct = async (id) => {
+const deleteProduct = async (id: number) => {
   const {data} = await ProductService.deleteProduct(id)
   if (!data.status) {
     notificationError("Thất bại")
@@ -40,6 +40,45 @@ const deleteProduct = async (id) => {
     await created()
   }
 }
+
+const stopBidding = async (id: number) => {
+  const {data} = await ProductService.stopBidding(id)
+  if (!data.success) {
+    notificationError("Thất bại")
+  } else {
+    notificationSuccess("Thành công")
+    await created()
+  }
+}
+
+const startBidding = async (id: number, dataBidding: object) => {
+  const {data} = await ProductService.startBidding(id, dataBidding)
+  if (!data.success) {
+    notificationError("Thất bại")
+  } else {
+    notificationSuccess("Thành công")
+    await created()
+  }
+}
+
+const openBiddingPrice = async (id: number) => {
+  ElMessageBox.prompt('Nhập giá khởi điểm', 'Đấu giá', {
+    confirmButtonText: 'Gửi',
+    cancelButtonText: 'Hủy',
+    inputPattern: /^[0-9]*$/,
+    inputErrorMessage: 'Hãy nhập giá',
+  })
+      .then(async ({value}) => {
+        await startBidding(id, {startPrice: value})
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Input canceled',
+        })
+      })
+}
+
 </script>
 
 <template>
@@ -62,6 +101,9 @@ const deleteProduct = async (id) => {
         <p class="font-medium">Giá</p>
       </div>
       <div class="col-span-1 flex items-center">
+        <p class="font-medium">Trạn thái đấu giá</p>
+      </div>
+      <div class="col-span-1 flex items-center">
       </div>
     </div>
 
@@ -78,12 +120,28 @@ const deleteProduct = async (id) => {
           <p class="text-sm font-medium text-black dark:text-white">{{ product.name }}</p>
         </div>
       </div>
-      <div class="col-span-2 hidden items-center sm:flex">
+      <div class="col-span-1 hidden items-center sm:flex">
         <p class="text-sm font-medium text-black dark:text-white">
           {{ product.category ? product.category.name : '' }}</p>
       </div>
       <div class="col-span-1 flex items-center">
         <p class="text-sm font-medium text-black dark:text-white">{{ product.price }}</p>
+      </div>
+      <div class="col-span-2">
+        <p class="text-sm font-medium text-black dark:text-white">
+          {{ product.bidding ? 'Đang đấu giá' : 'Không đấu giá' }}
+        </p>
+        <el-button type="danger"
+                   v-if="product.bidding"
+                   @click="stopBidding(product.id)"
+        >
+          Dừng đấu giá
+        </el-button>
+        <el-button type="primary"
+                   @click="openBiddingPrice(product.id)"
+                   v-else
+        >Đấu giá
+        </el-button>
       </div>
       <div class="col-span-1 flex items-center">
         <router-link :to="'/product/edit-product/' + product.id">

@@ -30,6 +30,20 @@ const ProductService = {
     )
     return ApiService.get(url)
   },
+  stopBidding(id) {
+    const url = ApiUrl.STOP_BIDDING_PRODUCT.replace(
+      `{${"id"}}`,
+      encodeURIComponent(String(id))
+    )
+    return ApiService.post(url)
+  },
+  startBidding(id, dataBidding) {
+    const url = ApiUrl.START_BIDDING_PRODUCT.replace(
+      `{${"id"}}`,
+      encodeURIComponent(String(id))
+    )
+    return ApiService.post(url, dataBidding)
+  },
   // verifyCodeSearch(code: string) {
   //   const url = ApiUrl.VERIFY_CODE_SEARCH.replace(
   //     `{${"code"}}`,
