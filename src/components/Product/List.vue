@@ -94,16 +94,14 @@ const openBiddingPrice = async (id: number) => {
       <div class="col-span-3 flex items-center">
         <p class="font-medium">Tên sản phẩm</p>
       </div>
-      <div class="col-span-2 hidden items-center sm:flex">
-        <p class="font-medium">Danh mục</p>
-      </div>
       <div class="col-span-1 flex items-center">
         <p class="font-medium">Giá</p>
       </div>
-      <div class="col-span-1 flex items-center">
+      <div class="col-span-2 flex items-center">
         <p class="font-medium">Trạn thái đấu giá</p>
       </div>
-      <div class="col-span-1 flex items-center">
+      <div class="col-span-2 flex items-center">
+        <p class="font-medium">Thêm</p>
       </div>
     </div>
 
@@ -120,17 +118,10 @@ const openBiddingPrice = async (id: number) => {
           <p class="text-sm font-medium text-black dark:text-white">{{ product.name }}</p>
         </div>
       </div>
-      <div class="col-span-1 hidden items-center sm:flex">
-        <p class="text-sm font-medium text-black dark:text-white">
-          {{ product.category ? product.category.name : '' }}</p>
-      </div>
       <div class="col-span-1 flex items-center">
         <p class="text-sm font-medium text-black dark:text-white">{{ product.price }}</p>
       </div>
-      <div class="col-span-2">
-        <p class="text-sm font-medium text-black dark:text-white">
-          {{ product.bidding ? 'Đang đấu giá' : 'Không đấu giá' }}
-        </p>
+      <div class="col-span-2 flex items-center">
         <el-button type="danger"
                    v-if="product.bidding"
                    @click="stopBidding(product.id)"
@@ -143,7 +134,7 @@ const openBiddingPrice = async (id: number) => {
         >Đấu giá
         </el-button>
       </div>
-      <div class="col-span-1 flex items-center">
+      <div class="col-span-2 flex items-center">
         <router-link :to="'/product/edit-product/' + product.id">
           <el-button type="warning" class="mr-[5px]">Sửa</el-button>
         </router-link>
