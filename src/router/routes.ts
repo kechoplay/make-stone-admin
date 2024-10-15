@@ -70,6 +70,21 @@ const routes: RouteDefined[] & any = [
     showRoute: true,
     component: () => import("@/views/Category/AddCategory.vue")
   },
+  {
+    path: "/video",
+    showRoute: true,
+    component: () => import("@/views/Video/Video.vue")
+  },
+  {
+    path: "/video/add",
+    showRoute: true,
+    component: () => import("@/views/Video/AddVideo.vue")
+  },
+  {
+    path: "/video/edit/:id",
+    showRoute: true,
+    component: () => import("@/views/Video/EditVideo.vue")
+  },
 ]
 
 export default routes

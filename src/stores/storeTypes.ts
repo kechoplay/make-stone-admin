@@ -14,4 +14,10 @@ export enum ApiUrl {
   GET_LIST_CATEGORY = "category/list",
   CREATE_CATEGORY = "category/insert",
   DELETE_CATEGORY = "category/delete/{id}",
+
+  GET_LIST_VIDEO = "video/list",
+  CREATE_VIDEO = "video/insert",
+  DELETE_VIDEO = "video/delete/{id}",
+  DETAIL_VIDEO = "video/{id}",
+  UPDATE_VIDEO = "video/update/{id}",
 }
