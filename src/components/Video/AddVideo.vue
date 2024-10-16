@@ -2,10 +2,20 @@
 import {ref} from 'vue'
 import VideoService from "@/api/video.service"
 import {ElNotification} from "element-plus"
+import { Plus } from "@element-plus/icons-vue"
 
-const name = ref<string>('')
-const iframe = ref<string>('')
-const type = ref<number>(0)
+const video = ref<{
+  name: string
+  iframe: string
+  type: number,
+  image: any
+}>({
+  name: "",
+  iframe: "",
+  type: 0,
+  image: ""
+})
+const fileMain = ref<[]>([])
 const loading = ref<boolean>(false)
 
 const notificationError = (message) => {
@@ -25,14 +35,15 @@ const notificationSuccess = (message) => {
 }
 
 const submitForm = async () => {
-  if (iframe.value == "") {
+  if (video.value.iframe == "") {
     notificationError("Hãy nhập iframe")
     return
   }
 
+  video.value.image = fileMain.value[0]
   loading.value = true
 
-  const {data} = await VideoService.createVideo({name: name.value, iframe: iframe.value, type: type.value})
+  const {data} = await VideoService.createVideo(video.value)
 
   loading.value = false
 
@@ -40,9 +51,12 @@ const submitForm = async () => {
     notificationError("Thất bại")
   } else {
     notificationSuccess("Thành công")
-    name.value = ''
-    iframe.value = ''
-    type.value = 0
+    video.value = {
+      name: "",
+      iframe: "",
+      type: 0,
+      image: []
+    }
   }
 }
 </script>
@@ -57,7 +71,7 @@ const submitForm = async () => {
           <div class="w-full mb-4.5">
             <label class="mb-2.5 block text-black dark:text-white">Tên video</label>
             <input type="text"
-                   v-model="name"
+                   v-model="video.name"
                    class="w-full rounded border-[1.5px] text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
@@ -65,7 +79,7 @@ const submitForm = async () => {
             <label class="mb-2.5 block text-black dark:text-white">Iframe<span
                 class="text-meta-1">*</span></label>
             <textarea rows="10"
-                   v-model="iframe"
+                   v-model="video.iframe"
                    class="w-full rounded border-[1.5px] text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             />
           </div>
@@ -74,12 +88,26 @@ const submitForm = async () => {
             <label class="mb-2.5 block text-black dark:text-white">Type<span
                 class="text-meta-1">*</span></label>
             <select
-                      v-model="type"
+                      v-model="video.type"
                       class="w-full rounded border-[1.5px] text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             >
               <option value="0">Trang đầu</option>
               <option value="1">Trang sau</option>
             </select>
+          </div>
+          <div class="mb-6">
+            <label class="mb-3 block text-sm font-medium text-black dark:text-white">
+              Ảnh kiểm định
+            </label>
+            <el-upload
+              v-model:file-list="fileMain"
+              :auto-upload="false"
+              :limit="1"
+              accept="image/*"
+              list-type="picture-card"
+            >
+              <el-icon><plus /></el-icon>
+            </el-upload>
           </div>
 
           <button type="button"

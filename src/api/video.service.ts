@@ -7,7 +7,7 @@ const VideoService = {
     return ApiService.get(url)
   },
   createVideo(data: object) {
-    return ApiService.post(ApiUrl.CREATE_VIDEO, data)
+    return ApiService.postFormData(ApiUrl.CREATE_VIDEO, data)
   },
   getDetailVideo(id: number) {
     const url = ApiUrl.DETAIL_VIDEO.replace(

@@ -3,6 +3,7 @@ import {ref} from 'vue'
 import VideoService from "@/api/video.service"
 import {ElNotification} from "element-plus"
 import {useRoute} from "vue-router"
+import { Plus } from "@element-plus/icons-vue"
 
 const route = useRoute()
 const id = route.params.id
@@ -10,11 +11,14 @@ const video = ref<{
   name: string
   iframe: string
   type: number
+  image: any
 }>({
   name: "",
   iframe: "",
   type: 0,
+  image: ""
 })
+const fileMain = ref<[]>([])
 const loading = ref<boolean>(false)
 
 const notificationError = (message) => {
@@ -39,6 +43,7 @@ const submitForm = async () => {
     return
   }
 
+  video.value.image = fileMain.value[0]
   loading.value = true
 
   const {data} = await VideoService.updateProduct(id, video.value)
@@ -57,10 +62,14 @@ const created = async () => {
     VideoService.getDetailVideo(id),
   ]).then((response) => {
     video.value = {
-      name: response[0].data.data.name,
+      name: response[0].data.data.name ?? "",
       iframe: response[0].data.data.iframe,
       type: response[0].data.data.type,
+      image: response[0].data.data.image,
     }
+    fileMain.value.push({
+      url: response[0].data.data.image,
+    })
   })
 }
 
@@ -101,6 +110,21 @@ created()
               <option value="0">Trang đầu</option>
               <option value="1">Trang sau</option>
             </select>
+          </div>
+
+          <div class="mb-6">
+            <label class="mb-3 block text-sm font-medium text-black dark:text-white">
+              Ảnh kiểm định
+            </label>
+            <el-upload
+              v-model:file-list="fileMain"
+              :auto-upload="false"
+              :limit="1"
+              accept="image/*"
+              list-type="picture-card"
+            >
+              <el-icon><plus /></el-icon>
+            </el-upload>
           </div>
 
           <button type="button"
